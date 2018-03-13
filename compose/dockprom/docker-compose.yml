@@ -17,7 +17,7 @@ prometheus:
     - '--web.enable-lifecycle'
   #  - '--web.external-url=http://localhost/prometheus'
     - '--web.route-prefix=/prometheus'
-  # restart: unless-stopped
+  restart: unless-stopped
   expose:
     - 9090
   net: ${CUSTOM_NETWORK_NAME}
@@ -118,3 +118,44 @@ caddy:
   net: ${CUSTOM_NETWORK_NAME}
   labels:
     org.label-schema.group: "monitoring"
+
+sample-service:
+  image: node:6.9.5-alpine
+  command: node test.js
+  volumes:
+      - ./sample-service/test.js:/test.js:ro
+  ports:
+      - "8000:8000"
+  net: ${CUSTOM_NETWORK_NAME}
+  restart: unless-stopped
+  labels:
+    org.label-schema.group: "monitoring"
+
+  gatling-runner:
+    image: gatling:2.3.0
+    scale: 2 # Scale to see the result of multiple nodes
+    build:
+      context: gatling/2.3.0
+    command: [-s, sample.SampleService]
+    environment:
+      - LOCAL_USER_ID=ADOP
+    volumes:
+      - ./gatling/2.3.0/simulations:/opt/app/java/gatling/user-files/simulations
+      - ./gatling/2.3.0/results:/opt/app/java/gatling/results
+    net: ${CUSTOM_NETWORK_NAME}
+    restart: unless-stopped
+    labels:
+      org.label-schema.group: "monitoring"
+
+  influxdb:
+    image: influxdb:2.3.0
+    build:
+      context: influxdb/1.2.0-alpine
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+      - "2003:2003"
+    net: ${CUSTOM_NETWORK_NAME}
+    restart: unless-stopped
+    labels:
+      org.label-schema.group: "monitoring"
