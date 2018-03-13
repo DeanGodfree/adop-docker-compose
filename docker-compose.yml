@@ -20,6 +20,7 @@ proxy:
     - "LDAP_USER_ID_ATTRIBUTE=cn"
     - "LDAP_USER_OBJECT_CLASS=inetOrgPerson"
     - "GIT_REPO=gitlab"
+  network_mode: bridge
 
 # gitlab:
 #  container_name: gitlab
