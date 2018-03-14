@@ -134,13 +134,13 @@ jenkins:
     DOCKER_CLIENT_CERT_PATH: ${DOCKER_CLIENT_CERT_PATH}
     DOCKER_NETWORK_NAME: ${CUSTOM_NETWORK_NAME}
     CARTRIDGE_SOURCES: ${CARTRIDGE_SOURCES}
-    JENKINS_SHARED_LIBRARY: "ssh://git@innersource.accenture.com/gskdo/jenkins-pipeline-libs.git"
-    AEM_SHARED_LIBRARY: "ssh://git@innersource.accenture.com/gskdo/aem-pipeline-libs.git"
+    JENKINS_SHARED_LIBRARY: "ssh://git@my_git_host/my_shared_repo/jenkins-pipeline-libs.git"
+    AEM_SHARED_LIBRARY: "ssh://git@my_git_host/my_shared_repo/aem-pipeline-libs.git"
     ADOP_GITLAB_ENABLED: "true"
     GIT_REPO: "gitlab"
     GITLAB_FRONT_END_URL: "http://gitlab/gitlab"
-    GITLAB_JENKINS_USERNAME: "jenkins"
-    GITLAB_JENKINS_PASSWORD: ${PASSWORD_JENKINS}
+    GITLAB_JENKINS_USERNAME: ${INITIAL_ADMIN_USER}
+    GITLAB_JENKINS_PASSWORD: ${INITIAL_ADMIN_PASSWORD_PLAIN}
     GITLAB_ROOT_PASSWORD: ${GITLAB_PWD}
 
 jenkins-slave:
