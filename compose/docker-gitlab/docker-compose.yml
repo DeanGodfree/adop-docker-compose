@@ -1,12 +1,42 @@
+version: "2.3"
+
+#volumes:
+#  volume_name: {}
+
+#networks:
+#  local_network:
+#    driver: bridge
+
+services:
   redis:
     restart: always
     container_name: redis
     image: sameersbn/redis:latest
     command:
-    - --loglevel warning
+      - --loglevel warning
     volumes:
-    - /srv/docker/gitlab/redis:/var/lib/redis:Z
-    net: ${CUSTOM_NETWORK_NAME}
+      - /srv/docker/gitlab/redis:/var/lib/redis:Z
+    #net: ${CUSTOM_NETWORK_NAME}
+    network_mode: bridge
+    external_links:
+      - proxy
+      - jenkins
+      - sonar
+      - nexus
+      - ldap
+      - sonar-mysql
+      - selenium-hub
+      - selenium-node-chrome
+      - selenium-node-firefox
+      - ldap-ltb
+      - ldap-phpadmin
+      - registry
+      - prometheus
+      - alertmanager
+      - nodeexporter
+      - cadvisor
+      - grafana
+      - caddy
     labels:
       org.label-schema.group: "scm"
 
@@ -21,7 +51,27 @@
     - DB_PASS=password
     - DB_NAME=gitlabhq_production
     - DB_EXTENSION=pg_trgm
-    net: ${CUSTOM_NETWORK_NAME}
+    #net: ${CUSTOM_NETWORK_NAME}
+    network_mode: bridge
+    external_links:
+      - proxy
+      - jenkins
+      - sonar
+      - nexus
+      - ldap
+      - sonar-mysql
+      - selenium-hub
+      - selenium-node-chrome
+      - selenium-node-firefox
+      - ldap-ltb
+      - ldap-phpadmin
+      - registry
+      - prometheus
+      - alertmanager
+      - nodeexporter
+      - cadvisor
+      - grafana
+      - caddy
     labels:
       org.label-schema.group: "scm"
 
@@ -165,6 +215,26 @@
     - OAUTH_AZURE_API_KEY=
     - OAUTH_AZURE_API_SECRET=
     - OAUTH_AZURE_TENANT_ID=
-    net: ${CUSTOM_NETWORK_NAME}
+    #net: ${CUSTOM_NETWORK_NAME}
+    network_mode: bridge
+    external_links:
+      - proxy
+      - jenkins
+      - sonar
+      - nexus
+      - ldap
+      - sonar-mysql
+      - selenium-hub
+      - selenium-node-chrome
+      - selenium-node-firefox
+      - ldap-ltb
+      - ldap-phpadmin
+      - registry
+      - prometheus
+      - alertmanager
+      - nodeexporter
+      - cadvisor
+      - grafana
+      - caddy
     labels:
       org.label-schema.group: "scm"

@@ -1,9 +1,16 @@
-#version: '2'
+version: '2.3'
 
-#services:
+#volumes:
+#  volume_name: {}
 
+#networks:
+#  local_network:
+#    driver: bridge
+
+services:
   elasticsearch:
-    build: elasticsearch/
+    build:
+      context: elasticsearch/
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
     ports:
@@ -11,14 +18,27 @@
       - "9300:9300"
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-    net: ${CUSTOM_NETWORK_NAME}
+    #net: ${CUSTOM_NETWORK_NAME}
+    network_mode: bridge
     restart: always
-    container_name: elasticsearch 
+    container_name: elasticsearch
+    external_links:
+      - proxy
+      - jenkins
+      - sonar
+      - nexus
+      - ldap
+      - sonar-mysql
+      - selenium-hub
+      - selenium-node-chrome
+      - selenium-node-firefox
+      - registry
     labels:
       org.label-schema.group: "logging"
 
   logstash:
-    build: logstash/
+    build: 
+      context: logstash/
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
@@ -26,20 +46,49 @@
       - "5000:5000"
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-    net: ${CUSTOM_NETWORK_NAME}
+    #net: ${CUSTOM_NETWORK_NAME}
+    network_mode: bridge
     restart: always
     container_name: logstash
+    external_links:
+      - proxy
+      - jenkins
+      - sonar
+      - nexus
+      - ldap
+      - sonar-mysql
+      - selenium-hub
+      - selenium-node-chrome
+      - selenium-node-firefox
+      - ldap-ltb
+      - ldap-phpadmin
+      - registry
     labels:
       org.label-schema.group: "logging"
 
   kibana:
-    build: kibana/
+    build: 
+      context: kibana/
     volumes:
       - ./kibana/config/:/usr/share/kibana/config:ro
     ports:
       - "5601:5601"
-    net: ${CUSTOM_NETWORK_NAME}
+    #net: ${CUSTOM_NETWORK_NAME}
+    network_mode: bridge
     restart: always
-    container_name: kibana
+    container_name: kibana  
+    external_links:
+      - proxy
+      - jenkins
+      - sonar
+      - nexus
+      - ldap
+      - sonar-mysql
+      - selenium-hub
+      - selenium-node-chrome
+      - selenium-node-firefox
+      - ldap-ltb
+      - ldap-phpadmin
+      - registry
     labels:
       org.label-schema.group: "logging"

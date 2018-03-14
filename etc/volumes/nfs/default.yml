@@ -1,56 +1,60 @@
-proxy:
-  volume_driver: nfs
-  volumes:
-    - ${NFS_HOST}/nfs/nginx_config:/etc/nginx
-    - ${NFS_HOST}/nfs/nginx_releasenote:/usr/share/nginx/html
+version: "2.3"
 
-ldap:
-  volume_driver: nfs
-  volumes:
-    - ${NFS_HOST}/nfs/ldap_db:/var/lib/ldap
-    - ${NFS_HOST}/nfs/ldap_static:/etc/ldap
+services:
+
+  proxy:
+    volume_driver: nfs
+    volumes:
+      - ${NFS_HOST}/nfs/nginx_config:/etc/nginx
+      - ${NFS_HOST}/nfs/nginx_releasenote:/usr/share/nginx/html
+
+  ldap:
+    volume_driver: nfs
+    volumes:
+      - ${NFS_HOST}/nfs/ldap_db:/var/lib/ldap
+      - ${NFS_HOST}/nfs/ldap_static:/etc/ldap
+    
+  sonar-mysql:
+    volume_driver: nfs
+    volumes:
+      - ${NFS_HOST}/nfs/sonar_mysql_data:/var/lib/mysql 
+
+  sonar:
+    volume_driver: nfs
+    volumes:
+      - ${NFS_HOST}/nfs/sonar_data:/opt/sonarqube/data
+      - ${NFS_HOST}/nfs/sonar_extensions:/opt/sonarqube/extensions
+      - ${NFS_HOST}/nfs/sonar_logs:/opt/sonarqube/logs
+
+  jenkins:
+    user: root 
+    volume_driver: nfs
+    volumes:
+      - ${NFS_HOST}/nfs/jenkins_home:/var/jenkins_home 
+
+  selenium-node-chrome:
+    volume_driver: nfs
+    volumes:
+      - ${NFS_HOST}/nfs/selenium_config:/var/selenium-config
+
+  selenium-node-firefox:
+    volume_driver: nfs
+    volumes:
+      - ${NFS_HOST}/nfs/selenium_config:/var/selenium-config
+
+  nexus:
+    volume_driver: nfs
+    volumes:
+      - ${NFS_HOST}/nfs/nexus_sonatype_work:/sonatype-work
+
+  registry:
+    volume_driver: nfs
+    volumes:
+      - ${NFS_HOST}/nfs/registry_certs:/certs
+      - ${NFS_HOST}/nfs/registry_data:/data
 
 #gitlab:
 #  volume_driver: nfs
 #  volumes:
 #    - ${NFS_HOST}/nfs/gitlab_opt:/var/opt/gitlab
 #    - ${NFS_HOST}/nfs/gitlab_log:/var/log/gitlab
-    
-sonar-mysql:
-  volume_driver: nfs
-  volumes:
-    - ${NFS_HOST}/nfs/sonar_mysql_data:/var/lib/mysql 
-
-sonar:
-  volume_driver: nfs
-  volumes:
-    - ${NFS_HOST}/nfs/sonar_data:/opt/sonarqube/data
-    - ${NFS_HOST}/nfs/sonar_extensions:/opt/sonarqube/extensions
-    - ${NFS_HOST}/nfs/sonar_logs:/opt/sonarqube/logs
-
-jenkins:
-  user: root 
-  volume_driver: nfs
-  volumes:
-    - ${NFS_HOST}/nfs/jenkins_home:/var/jenkins_home 
-
-selenium-node-chrome:
-  volume_driver: nfs
-  volumes:
-    - ${NFS_HOST}/nfs/selenium_config:/var/selenium-config
-
-selenium-node-firefox:
-  volume_driver: nfs
-  volumes:
-    - ${NFS_HOST}/nfs/selenium_config:/var/selenium-config
-
-nexus:
-  volume_driver: nfs
-  volumes:
-    - ${NFS_HOST}/nfs/nexus_sonatype_work:/sonatype-work
-
-registry:
-  volume_driver: nfs
-  volumes:
-    - ${NFS_HOST}/nfs/registry_certs:/certs
-    - ${NFS_HOST}/nfs/registry_data:/data
