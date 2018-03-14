@@ -1,14 +1,14 @@
-version: "2.3"
+#version: "2.3"
 
-volumes:
-  prometheus_data: {}
-  grafana_data: {}
+#volumes:
+#  prometheus_data: {}
+#  grafana_data: {}
 
 #networks:
 #  local_network:
 #    driver: bridge
 
-services:
+#services:
   prometheus:
     image: prom/prometheus:v2.2.0-rc.0
     container_name: prometheus
@@ -29,7 +29,8 @@ services:
       - 9090
     #networks:
     #  - ${CUSTOM_NETWORK_NAME}
-    network_mode: bridge
+    #network_mode: bridge
+    net: ${CUSTOM_NETWORK_NAME}
     external_links:
       - proxy
     labels:
@@ -46,8 +47,9 @@ services:
     restart: unless-stopped
     expose:
       - 9093
-    networks:
-      - ${CUSTOM_NETWORK_NAME}
+    #networks:
+    #  - ${CUSTOM_NETWORK_NAME}
+    net: ${CUSTOM_NETWORK_NAME}
     labels:
       org.label-schema.group: "monitoring"
 
@@ -67,8 +69,9 @@ services:
     restart: unless-stopped
     expose:
       - 9100
-    networks:
-      - ${CUSTOM_NETWORK_NAME}
+    #networks:
+    #  - ${CUSTOM_NETWORK_NAME}
+    net: ${CUSTOM_NETWORK_NAME}
     labels:
       org.label-schema.group: "monitoring"
 
@@ -84,8 +87,9 @@ services:
     restart: unless-stopped
     expose:
       - 8080
-    networks:
-      - ${CUSTOM_NETWORK_NAME}
+    #networks:
+    #  - ${CUSTOM_NETWORK_NAME}
+    net: ${CUSTOM_NETWORK_NAME}
     labels:
       org.label-schema.group: "monitoring"
 
@@ -112,8 +116,9 @@ services:
     restart: unless-stopped
     expose:
       - 3000
-    networks:
-      - ${CUSTOM_NETWORK_NAME}
+    #networks:
+    #  - ${CUSTOM_NETWORK_NAME}
+    net: ${CUSTOM_NETWORK_NAME}
     labels:
       org.label-schema.group: "monitoring"
 
@@ -130,51 +135,8 @@ services:
       - ADMIN_USER=admin
       - ADMIN_PASSWORD=admin
     restart: unless-stopped
-    networks:
-      - ${CUSTOM_NETWORK_NAME}
+    #networks:
+    #  - ${CUSTOM_NETWORK_NAME}
+    net: ${CUSTOM_NETWORK_NAME}
     labels:
       org.label-schema.group: "monitoring"
-
-  sample-service:
-    image: node:6.9.5-alpine
-    command: node test.js
-    volumes:
-      - ./sample-service/test.js:/test.js:ro
-    ports:
-      - "8000:8000"
-    restart: unless-stopped
-    networks:
-      - ${CUSTOM_NETWORK_NAME}
-    labels:
-      org.label-schema.group: "monitoring"
-
-  gatling-runner:
-    #image: gatling:2.3.0
-    scale: 2 # Scale to see the result of multiple nodes
-    build: 
-      context: gatling/2.3.0
-    command: [-s, sample.SampleService]
-    environment:
-      - LOCAL_USER_ID=ADOP
-    volumes:
-      - ./gatling/2.3.0/simulations:/opt/app/java/gatling/user-files/simulations
-      - ./gatling/2.3.0/results:/opt/app/java/gatling/results
-    networks:
-      - ${CUSTOM_NETWORK_NAME}
-    labels:
-      org.label-schema.group: "monitoring"
-    restart: unless-stopped
-
-  influxdb:
-    #image: influxdb:2.3.0
-    build:
-      context: influxdb/1.2.0-alpine
-    ports:
-      - "8083:8083"
-      - "8086:8086"
-      - "2003:2003"
-    networks:
-      - ${CUSTOM_NETWORK_NAME}
-    labels:
-      org.label-schema.group: "monitoring"
-    restart: unless-stopped
