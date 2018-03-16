@@ -134,8 +134,7 @@ jenkins:
     DOCKER_CLIENT_CERT_PATH: ${DOCKER_CLIENT_CERT_PATH}
     DOCKER_NETWORK_NAME: ${CUSTOM_NETWORK_NAME}
     CARTRIDGE_SOURCES: ${CARTRIDGE_SOURCES}
-    JENKINS_SHARED_LIBRARY: "ssh://git@my_git_host/my_shared_repo/jenkins-pipeline-libs.git"
-    AEM_SHARED_LIBRARY: "ssh://git@my_git_host/my_shared_repo/aem-pipeline-libs.git"
+    JENKINS_SHARED_LIBRARY: "ssh://git@innersource.accenture.com/mydas/jenkins-pipeline-libs.git"
     ADOP_GITLAB_ENABLED: "true"
     GIT_REPO: "gitlab"
     GITLAB_FRONT_END_URL: "http://gitlab/gitlab"
@@ -150,7 +149,7 @@ jenkins-slave:
   net: ${CUSTOM_NETWORK_NAME}
   privileged: true
   environment:
-    SLAVE_LABELS: "aws ldap java8 docker terraform tower"
+    SLAVE_LABELS: "aws ldap java8 docker terraform tower nodejs"
     SWARM_PASSWORD: ${PASSWORD_JENKINS}
     SLAVE_EXECUTORS: ${SLAVE_EXECUTORS}
     INITIAL_ADMIN_USER: ${INITIAL_ADMIN_USER}
